@@ -1,0 +1,52 @@
+<html>
+<head>
+<script>
+setInterval("showTemp();",10000);
+
+function showTemp() {
+   var xmlhttp = new XMLHttpRequest();
+   xmlhttp.onreadystatechange = function() {
+         if(xmlhttp.readyState == 1) {
+             document.getElementById("tempBox").innerHTML = "In Attesa";
+         }
+         if(xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+             if(xmlhttp.responseText.length > 10) {
+               document.getElementById("tempBox").innerHTML = xmlhttp.responseText;
+             }
+             else {
+               document.getElementById("tempBox").innerHTML = "Termometri in lettura";
+             }
+         }
+   }
+   xmlhttp.open("GET","get_temperature.php",true);
+   xmlhttp.send();
+}
+function accensione(comando) {
+   var xmlhttp = new XMLHttpRequest();
+   xmlhttp.onreadystatechange = function() {
+         if(xmlhttp.readyState == 1) {
+             document.getElementById("accensioneBox").innerHTML = "In Attesa di "+comando;
+         }
+         if(xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+             document.getElementById("accensioneBox").innerHTML = comando+" eseguito";
+         }
+   }
+   xmlhttp.open("GET","/cgi-bin/cicloacqua/accensione.py?"+comando,true);
+   xmlhttp.send();
+}
+</script>
+</head>
+<body>
+<H1> Controllo Ciclo dell'Acqua </H1>
+
+<H3>Temperature</H3><br>
+
+<div id="tempBox"></div><br>
+
+<H3>Accensione</H3>
+<button onclick="accensione('accendi')">Accendi</button> 
+<button onclick="accensione('spegni')">Spegni</button> <br>
+<span id="accensioneBox"></span><br>
+
+</body>
+</html>
